@@ -1,5 +1,5 @@
 {
-    "name": "thomask/tk-cache",
+    "name": "kiesi/tk-cache",
     "type": "typo3-cms-extension",
     "description": "BE Cache Handling",
     "license": "GPL-2.0-or-later",
