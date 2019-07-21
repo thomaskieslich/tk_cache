@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-07-21T19:47:46Z" product-name="tk_cache">
+		<header/>
+		<body>
+			<trans-unit id="module.action.apcu">
+				<source>APCu Cache</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="module.action.config">
+				<source>Configuration</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="module.shortcut_name">
+				<source>APC Manager</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="module.action.opcache">
+				<source>Opcache</source>
+				<target></target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

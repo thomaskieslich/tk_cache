@@ -1,0 +1,17 @@
+{
+    "name": "thomask/tk-cache",
+    "type": "typo3-cms-extension",
+    "description": "BE Cache Handling",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "typo3/cms-core": "^9.5"
+    },
+    "replace": {
+        "tk_cache": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "ThomasK\\TkCache\\": "Classes"
+        }
+    }
+}
