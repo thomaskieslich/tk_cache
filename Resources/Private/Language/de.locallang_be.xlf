@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-07-21T19:47:46Z" product-name="tk_cache">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-08-02T16:03:38Z" product-name="tk_cache">
 		<header/>
 		<body>
-			<trans-unit id="module.action.apcu">
+			<trans-unit id="module.action.index">
 				<source>APCu Cache</source>
 				<target></target>
 			</trans-unit>
@@ -12,11 +12,19 @@
 				<target></target>
 			</trans-unit>
 			<trans-unit id="module.shortcut_name">
-				<source>APC Manager</source>
+				<source>APCU</source>
 				<target></target>
 			</trans-unit>
-			<trans-unit id="module.action.opcache">
+			<trans-unit id="module.action.opc">
 				<source>Opcache</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="module.action.apcu">
+				<source></source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="module.action.redis">
+				<source>Redis</source>
 				<target></target>
 			</trans-unit>
 		</body>

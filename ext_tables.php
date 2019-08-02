@@ -11,7 +11,7 @@ call_user_func(
                 'tk_cache',
                 'bottom',
                 [
-                    'BackendCache' => 'index, opc, config'
+                    'BackendCache' => 'index, opc, redis, config'
                 ],
                 [
                     'access' => 'admin',

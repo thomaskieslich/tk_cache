@@ -4,6 +4,7 @@ namespace ThomasK\TkCache\Controller;
 
 use ThomasK\TkCache\Utility\ApcuUtility;
 use ThomasK\TkCache\Utility\OpcUtility;
+use ThomasK\TkCache\Utility\RedisUtility;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Menu\Menu;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
@@ -69,8 +70,6 @@ class BackendCacheController extends ActionController
         $this->registerDocheaderButtons();
         $this->generateMenu();
 
-        //https://haydenjames.io/php-performance-opcache-control-panels/
-
         $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
         if (OpcUtility::isOpcacheEnabled() === true) {
             $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
@@ -80,6 +79,27 @@ class BackendCacheController extends ActionController
             $this->view->assignMultiple([
                 'opcEnabled' => true,
                 'opcUrl' => $opcUrl
+            ]);
+        }
+    }
+
+    /**
+     * Redis Overview
+     */
+    public function redisAction(): void
+    {
+        $this->registerDocheaderButtons();
+        $this->generateMenu();
+
+        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
+        if (RedisUtility::isRedisEnabled() === true) {
+            $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
+                '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
+            $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
+            $redisUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'redis.php');
+            $this->view->assignMultiple([
+                'redisEnabled' => true,
+                'redisUrl' => $redisUrl
             ]);
         }
     }
@@ -105,7 +125,7 @@ class BackendCacheController extends ActionController
         /** @var Menu $menu */
         $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('WebFuncJumpMenu');
-        foreach (['index', 'opc'] as $action) {
+        foreach (['index', 'redis', 'opc'] as $action) {
             $item = $menu->makeMenuItem()
                 ->setHref($this->getControllerContext()->getUriBuilder()->uriFor($action))
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:tk_cache/Resources/Private/Language/locallang_be.xlf:module.action.' . $action));
