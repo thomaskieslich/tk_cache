@@ -1,13 +1,13 @@
 {
     "name": "kiesi/tk-cache",
     "type": "typo3-cms-extension",
-    "description": "BE Cache Handling",
+    "description": "Dashboard Cache Widget",
     "license": "GPL-2.0-or-later",
     "require": {
         "typo3/cms-core": "^9.5"
     },
     "replace": {
-        "tk_cache": "self.version"
+        "thomask/tk_cache": "*"
     },
     "autoload": {
         "psr-4": {
