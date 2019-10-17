@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
  * Class BackendApcController
@@ -31,7 +32,7 @@ class BackendCacheController extends ActionController
      * @var array
      */
     protected $MOD_MENU = [
-        'function' => []
+        'function' => [],
     ];
 
     /**
@@ -41,46 +42,70 @@ class BackendCacheController extends ActionController
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
 
+    public function initializeViewAction(ViewInterface $view)
+    {
+
+        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+
+        $this->MOD_MENU['function'][] = 'index';
+        //check caches
+        if (ApcuUtility::isApcuEnabled() === true) {
+            $this->MOD_MENU['function'][] = 'apcu';
+        }
+        if (RedisUtility::isRedisEnabled() === true) {
+            $this->MOD_MENU['function'][] = 'redis';
+        }
+        if (OpcUtility::isOpcacheEnabled() === true) {
+            $this->MOD_MENU['function'][] = 'opc';
+        }
+
+        $this->registerDocheaderButtons();
+        $this->generateMenu();
+        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
+    }
+
+
     /**
-     * APC Overview
+     * Module Overview
      */
     public function indexAction(): void
     {
-        $this->registerDocheaderButtons();
-        $this->generateMenu();
-
-        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
-        if (ApcuUtility::isApcuEnabled() === true) {
-            $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
-                '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
-            $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
-            $apcUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'apc.php');
-            $this->view->assignMultiple([
-                'apcEnabled' => true,
-                'apcUrl' => $apcUrl
-            ]);
-        }
+//        $this->MOD_MENU['function'][] = 'index';
+//
+//        //check caches
+//        if (ApcuUtility::isApcuEnabled() === true) {
+//            $this->MOD_MENU['function'][] = 'apcu';
+//        }
+//        if (RedisUtility::isRedisEnabled() === true) {
+//            $this->MOD_MENU['function'][] = 'redis';
+//        }
+//        if (OpcUtility::isOpcacheEnabled() === true) {
+//            $this->MOD_MENU['function'][] = 'opc';
+//        }
+//
+//        $this->registerDocheaderButtons();
+//        $this->generateMenu();
+//        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
     }
 
     /**
-     * Opcache Overview
+     * APC Overview
      */
-    public function opcAction(): void
+    public function apcuAction(): void
     {
-        $this->registerDocheaderButtons();
-        $this->generateMenu();
+//        $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
+//            '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
 
-        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
-        if (OpcUtility::isOpcacheEnabled() === true) {
-            $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
-                '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
-            $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
-            $opcUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'opc.php');
-            $this->view->assignMultiple([
-                'opcEnabled' => true,
-                'opcUrl' => $opcUrl
-            ]);
-        }
+//        $this->registerDocheaderButtons();
+//        $this->generateMenu();
+//        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
+
+        $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
+        $apcUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'apc.php');
+        $this->view->assignMultiple([
+            'apcEnabled' => true,
+            'apcUrl' => $apcUrl,
+        ]);
     }
 
     /**
@@ -88,20 +113,29 @@ class BackendCacheController extends ActionController
      */
     public function redisAction(): void
     {
-        $this->registerDocheaderButtons();
-        $this->generateMenu();
+        $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
+            '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
+        $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
+        $redisUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'redis.php');
+        $this->view->assignMultiple([
+            'redisEnabled' => true,
+            'redisUrl' => $redisUrl,
+        ]);
+    }
 
-        $this->view->getModuleTemplate()->setModuleName($this->request->getPluginName() . '_' . $this->request->getControllerName());
-        if (RedisUtility::isRedisEnabled() === true) {
-            $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
-                '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
-            $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
-            $redisUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'redis.php');
-            $this->view->assignMultiple([
-                'redisEnabled' => true,
-                'redisUrl' => $redisUrl
-            ]);
-        }
+    /**
+     * Opcache Overview
+     */
+    public function opcAction(): void
+    {
+//        $this->view->getModuleTemplate()->getPageRenderer()->addCssInlineBlock('TkCache',
+//            '.module-body{padding:65px 0 0!important;overflow-y:hidden}');
+        $directoryPath = ExtensionManagementUtility::extPath('tk_cache') . 'Resources/Public/Php';
+        $opcUrl = PathUtility::getAbsoluteWebPath(PathUtility::getRelativePathTo($directoryPath) . 'opc.php');
+        $this->view->assignMultiple([
+            'opcEnabled' => true,
+            'opcUrl' => $opcUrl,
+        ]);
     }
 
     /**
@@ -113,7 +147,7 @@ class BackendCacheController extends ActionController
         $this->generateMenu();
         $this->view->assignMultiple([
             'cacheBackends' => ApcuUtility::getCacheConfiguration(),
-            'apcEnabled' => ApcuUtility::isApcEnabled()
+            'apcEnabled' => ApcuUtility::isApcEnabled(),
         ]);
     }
 
@@ -125,7 +159,7 @@ class BackendCacheController extends ActionController
         /** @var Menu $menu */
         $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('WebFuncJumpMenu');
-        foreach (['index', 'redis', 'opc'] as $action) {
+        foreach ($this->MOD_MENU['function'] as $action) {
             $item = $menu->makeMenuItem()
                 ->setHref($this->getControllerContext()->getUriBuilder()->uriFor($action))
                 ->setTitle($this->getLanguageService()->sL('LLL:EXT:tk_cache/Resources/Private/Language/locallang_be.xlf:module.action.' . $action));

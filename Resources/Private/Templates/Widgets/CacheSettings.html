@@ -1,0 +1,23 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="WidgetWithTitle" />
+
+<f:section name="main">
+    <table class="widget-table">
+        <thead>
+        <tr>
+            <th>Cache Name</th>
+            <th>Cache Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        <f:for each="{items}" as="item">
+            <tr>
+                <td>{item.name}</td>
+                <td>{item.type}</td>
+            </tr>
+        </f:for>
+        </tbody>
+    </table>
+</f:section>
+
+</html>
